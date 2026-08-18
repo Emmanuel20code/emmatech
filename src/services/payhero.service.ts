@@ -295,26 +295,8 @@ export class PayHeroService {
             }
         }
 
-        // Sandbox / Simulated Mode if API credentials are not yet configured
-        const simulatedCheckoutId = `PH-SANDBOX-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
-        if (payment) {
-            await payment.update({
-                checkoutRequestId: simulatedCheckoutId,
-                payheroCheckoutId: simulatedCheckoutId,
-                payheroReference: req.paymentId,
-                payheroStatus: 'INITIATED_SIMULATED'
-            });
-        }
-
-        return {
-            success: true,
-            checkoutRequestId: simulatedCheckoutId,
-            paymentId: req.paymentId,
-            customerMessage: `M-Pesa PIN prompt sent for KES ${amountInKes} (${destinationLabel}). Enter your M-Pesa PIN to complete payment.`,
-            payheroReference: req.paymentId,
-            destinationAccount,
-            destinationType
-        };
+        // Live Production Mode: Require valid PayHero API credentials
+        throw new Error('PayHero API credentials (accountId and basicAuthToken) are not configured. Live production mode requires valid PayHero API credentials in Platform Settings.');
     }
 
     /**

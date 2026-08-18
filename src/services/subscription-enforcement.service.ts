@@ -39,7 +39,7 @@ export interface SuperAdminOverrideParams {
 }
 
 export class SubscriptionEnforcementService {
-    public static DEFAULT_TRIAL_DAYS = 14;
+    public static DEFAULT_TRIAL_DAYS = 3;
     public static DEFAULT_GRACE_DAYS = 7;
 
     /**

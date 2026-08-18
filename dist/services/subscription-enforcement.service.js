@@ -9,7 +9,7 @@ const logger_1 = __importDefault(require("../utils/logger"));
 const crypto_1 = __importDefault(require("crypto"));
 const sequelize_1 = require("sequelize");
 class SubscriptionEnforcementService {
-    static { this.DEFAULT_TRIAL_DAYS = 14; }
+    static { this.DEFAULT_TRIAL_DAYS = 3; }
     static { this.DEFAULT_GRACE_DAYS = 7; }
     /**
      * 1. Register Free Trial with Legally Binding Digital Agreement

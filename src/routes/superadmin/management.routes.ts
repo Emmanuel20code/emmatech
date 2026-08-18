@@ -694,56 +694,12 @@ router.post('/master-daraja/test', async (req: any, res: any) => {
     }
 });
 
-// 13. Simulate M-Pesa Callback Payload
+// 13. Live Production M-Pesa Callback Status Endpoint
 router.post('/master-daraja/simulate-callback', async (req: any, res: any) => {
-    try {
-        const simReceipt = `TEST_REC_${Math.floor(Math.random() * 900000 + 100000)}`;
-        const simCheckoutId = `SIM_CHK_${Date.now()}`;
-        const simulatedPayload = {
-            Body: {
-                stkCallback: {
-                    MerchantRequestID: `SIM_MRCH_${Date.now()}`,
-                    CheckoutRequestID: simCheckoutId,
-                    ResultCode: 0,
-                    ResultDesc: 'The service request is processed successfully.',
-                    CallbackMetadata: {
-                        Item: [
-                            { Name: 'Amount', Value: 1000 },
-                            { Name: 'MpesaReceiptNumber', Value: simReceipt },
-                            { Name: 'TransactionDate', Value: 20260815163000 },
-                            { Name: 'PhoneNumber', Value: '254712345678' }
-                        ]
-                    }
-                }
-            }
-        };
-
-        // Record simulated callback in MpesaCallbackLog to verify database processing of simulated payload data
-        const callbackLog = await MpesaCallbackLog.create({
-            checkoutRequestId: simCheckoutId,
-            merchantRequestId: simulatedPayload.Body.stkCallback.MerchantRequestID,
-            rawPayload: JSON.stringify(simulatedPayload),
-            validationStatus: 'VALID',
-            signatureVerified: true,
-            databaseUpdateStatus: 'SUCCESS',
-            errorDetails: 'Simulated test connection callback processed successfully'
-        });
-
-        res.json({
-            success: true,
-            message: `Simulated M-Pesa callback processed successfully! Receipt: ${simReceipt}`,
-            receipt: simReceipt,
-            checkoutRequestId: simCheckoutId,
-            logId: callbackLog.id,
-            simulatedPayload
-        });
-    } catch (error: any) {
-        logger.error('Failed to simulate M-Pesa callback', { error: error.message });
-        res.status(500).json({
-            success: false,
-            error: error.message || 'Failed to process simulated M-Pesa callback.'
-        });
-    }
+    res.status(400).json({
+        success: false,
+        error: 'Simulation mode is disabled. Live production mode active. Please use real M-Pesa / PayHero live callbacks.'
+    });
 });
 
 export default router;
