@@ -1,12 +1,16 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IspService = void 0;
 const models_1 = require("../models");
 const sequelize_1 = require("sequelize");
 const mikrotik_service_1 = require("./mikrotik.service");
+const logger_1 = __importDefault(require("../utils/logger"));
 class IspService {
     static async registerSubscriber(data) {
-        const { name, phoneNumber, pppoeUsername, pppoePassword, packageId, routerId, tenantId } = data;
+        const { name, phoneNumber, pppoeUsername, pppoePassword, packageId, routerId, tenantId, connectionType = 'PPPOE' } = data;
         const pkg = await models_1.Package.findByPk(packageId);
         if (!pkg)
             throw new Error('Package not found');
@@ -22,11 +26,13 @@ class IspService {
             packageId,
             routerId,
             tenantId,
-            status: 'ACTIVE' // Start as active (usually after first payment)
+            connectionType,
+            status: 'ACTIVE' // Start as active
         });
-        // 2. Create on MikroTik (using profile from package)
-        await mikrotik_service_1.MikroTikService.createHotspotUser(router, pppoeUsername, pppoePassword, undefined, // macAddress
-        pkg.name, `Subscriber: ${name}`);
+        // 2. Automate PPPoE Onboarding on MikroTik
+        if (connectionType === 'PPPOE' && pppoeUsername) {
+            await mikrotik_service_1.MikroTikService.createPPPoESecret(router, pppoeUsername, pppoePassword || '123456', pkg.name || 'default', `Jevish PPPoE: ${name}`);
+        }
         return subscriber;
     }
     static async renewSubscriber(subscriberId, durationDays) {
@@ -58,11 +64,17 @@ class IspService {
         subscriber.status = 'ACTIVE';
         subscriber.lastPaymentDate = now;
         await subscriber.save();
-        // Ensure active on MikroTik if router exists
-        if (subscriber.routerId) {
+        // Automatic connection after payment: Enable PPPoE secret and force reconnect session
+        if (subscriber.routerId && subscriber.pppoeUsername) {
             const router = await models_1.Router.findByPk(subscriber.routerId);
-            if (router && subscriber.pppoeUsername) {
-                await mikrotik_service_1.MikroTikService.toggleHotspotUser(router, subscriber.pppoeUsername, true).catch(() => { });
+            if (router) {
+                try {
+                    await mikrotik_service_1.MikroTikService.togglePPPoESecret(router, subscriber.pppoeUsername, true);
+                    await mikrotik_service_1.MikroTikService.disconnectPPPoEUser(router, subscriber.pppoeUsername);
+                }
+                catch (e) {
+                    logger_1.default.warn('Failed to auto-connect PPPoE user on router after payment', { error: e.message });
+                }
             }
         }
         return subscriber;
@@ -72,8 +84,6 @@ class IspService {
         if (!subscriber)
             throw new Error('Subscriber not found');
         const { name, phoneNumber, pppoeUsername, pppoePassword, packageId, routerId, address, notes, status } = data;
-        // If username/password changes, we might need to handle MikroTik differently
-        // For simplicity, let's update DB first and then sync status if needed
         await subscriber.update({
             name: name ?? subscriber.name,
             phoneNumber: phoneNumber ?? subscriber.phoneNumber,
@@ -88,11 +98,12 @@ class IspService {
         // Sync with MikroTik if router and username available
         if (subscriber.routerId && subscriber.pppoeUsername) {
             const router = await models_1.Router.findByPk(subscriber.routerId);
-            const pkg = subscriber.packageId ? await models_1.Package.findByPk(subscriber.packageId) : null;
-            if (router && pkg) {
-                // In a real system, we'd update the user on MikroTik
-                // For now, toggle status based on subscriber status
-                await mikrotik_service_1.MikroTikService.toggleHotspotUser(router, subscriber.pppoeUsername, subscriber.status === 'ACTIVE');
+            if (router) {
+                const isActive = subscriber.status === 'ACTIVE';
+                await mikrotik_service_1.MikroTikService.togglePPPoESecret(router, subscriber.pppoeUsername, isActive).catch(() => { });
+                if (!isActive) {
+                    await mikrotik_service_1.MikroTikService.disconnectPPPoEUser(router, subscriber.pppoeUsername).catch(() => { });
+                }
             }
         }
         return subscriber;
@@ -106,13 +117,11 @@ class IspService {
             const router = await models_1.Router.findByPk(subscriber.routerId);
             if (router) {
                 try {
-                    // We don't have a direct deleteUser in MikroTikService yet, 
-                    // but we can use toggle or add a delete method.
-                    // Let's assume for now we just disable them or add a method.
-                    await mikrotik_service_1.MikroTikService.toggleHotspotUser(router, subscriber.pppoeUsername, false);
+                    await mikrotik_service_1.MikroTikService.removePPPoESecret(router, subscriber.pppoeUsername);
+                    await mikrotik_service_1.MikroTikService.disconnectPPPoEUser(router, subscriber.pppoeUsername);
                 }
                 catch (e) {
-                    console.error('Failed to remove user from MikroTik', e);
+                    logger_1.default.warn('Failed to remove PPPoE secret from router on delete', { error: e.message });
                 }
             }
         }
@@ -133,14 +142,16 @@ class IspService {
                     continue;
                 const router = await models_1.Router.findByPk(sub.routerId);
                 if (router) {
-                    await mikrotik_service_1.MikroTikService.toggleHotspotUser(router, sub.pppoeUsername, false);
+                    // Automatic disconnection if due date and PPPoE subscription not paid
+                    await mikrotik_service_1.MikroTikService.togglePPPoESecret(router, sub.pppoeUsername, false);
+                    await mikrotik_service_1.MikroTikService.disconnectPPPoEUser(router, sub.pppoeUsername).catch(() => { });
                 }
                 sub.status = 'SUSPENDED';
                 await sub.save();
-                console.log(`Suspended subscriber: ${sub.pppoeUsername}`);
+                logger_1.default.info(`Automatically suspended expired PPPoE subscriber due to unpaid subscription: ${sub.pppoeUsername}`);
             }
             catch (error) {
-                console.error(`Failed to suspend ${sub.pppoeUsername}:`, error);
+                logger_1.default.error(`Failed to suspend PPPoE subscriber ${sub.pppoeUsername}:`, { error: error.message });
             }
         }
     }

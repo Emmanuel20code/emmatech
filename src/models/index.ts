@@ -584,7 +584,7 @@ export class Package extends Model {
   public speedLimit!: string | null;
   public isEnabled!: boolean;
   public tenantId!: string;
-  public type!: 'HOTSPOT' | 'ISP';
+  public type!: 'HOTSPOT' | 'ISP' | 'PPPOE' | 'PPPoE' | 'VOUCHER';
   // Enhanced MikroTik fields
   public description!: string | null;
   public validity!: number | null; // Days until expiry
@@ -612,7 +612,7 @@ Package.init({
   speedLimit: { type: DataTypes.STRING, allowNull: true },
   isEnabled: { type: DataTypes.BOOLEAN, defaultValue: true },
   tenantId: { type: DataTypes.UUID, allowNull: false },
-  type: { type: DataTypes.ENUM('HOTSPOT', 'ISP'), defaultValue: 'HOTSPOT' },
+  type: { type: DataTypes.ENUM('HOTSPOT', 'ISP', 'PPPOE', 'PPPoE', 'VOUCHER'), defaultValue: 'HOTSPOT' },
   // Enhanced MikroTik fields
   description: { type: DataTypes.TEXT },
   validity: { type: DataTypes.INTEGER }, // Days
@@ -3489,11 +3489,51 @@ PaymentVerificationAudit.init({
   tableName: 'payment_verification_audits'
 });
 
+// PppoeRequest Model for PPPoE Connection Applications / Leads
+class PppoeRequest extends Model {
+  public id!: string;
+  public tenantId!: string | null;
+  public routerId!: string;
+  public fullName!: string;
+  public phone!: string;
+  public email!: string | null;
+  public location!: string;
+  public packageId!: string | null;
+  public packageName!: string | null;
+  public pppoeUsername!: string | null;
+  public pppoePassword!: string | null;
+  public status!: 'PENDING' | 'APPROVED' | 'REJECTED' | 'PROVISIONED';
+  public adminNotes!: string | null;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
+
+PppoeRequest.init({
+  id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
+  tenantId: { type: DataTypes.STRING, allowNull: true },
+  routerId: { type: DataTypes.STRING, allowNull: false },
+  fullName: { type: DataTypes.STRING, allowNull: false },
+  phone: { type: DataTypes.STRING, allowNull: false },
+  email: { type: DataTypes.STRING, allowNull: true },
+  location: { type: DataTypes.STRING, allowNull: false },
+  packageId: { type: DataTypes.STRING, allowNull: true },
+  packageName: { type: DataTypes.STRING, allowNull: true },
+  pppoeUsername: { type: DataTypes.STRING, allowNull: true },
+  pppoePassword: { type: DataTypes.STRING, allowNull: true },
+  status: { type: DataTypes.STRING, allowNull: false, defaultValue: 'PENDING' },
+  adminNotes: { type: DataTypes.TEXT, allowNull: true }
+}, {
+  sequelize,
+  modelName: 'PppoeRequest',
+  tableName: 'pppoe_requests'
+});
+
 // RADIUS Relationships
 Nas.belongsTo(Tenant, { foreignKey: 'tenantId' });
 RadiusPolicy.belongsTo(Tenant, { foreignKey: 'tenantId' });
 SaaSSubscriptionPayment.belongsTo(Tenant, { foreignKey: 'tenantId' });
 PaymentLog.belongsTo(Tenant, { foreignKey: 'tenantId', constraints: false });
 PaymentVerificationAudit.belongsTo(Tenant, { foreignKey: 'tenantId', constraints: false });
+PppoeRequest.belongsTo(Tenant, { foreignKey: 'tenantId', constraints: false });
 
-export { sequelize, PaymentVerificationAudit };
+export { sequelize, PaymentVerificationAudit, PppoeRequest };

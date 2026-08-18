@@ -103,29 +103,9 @@ const AdminDashboard = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-            <div className="container mx-auto px-6 py-8">
-                {/* Header */}
-                <div className="mb-8">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Admin Dashboard</h1>
-                            <p className="text-slate-600 mt-1">Platform overview and system management</p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <Badge variant="success" className="flex items-center gap-2">
-                                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                                System Online
-                            </Badge>
-                            <Button variant="ghost" size="sm">
-                                Refresh
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Key Metrics */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="space-y-8">
+            {/* Key Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     {revenueCards.map((card, index) => {
                         const Icon = card.icon;
                         return (
@@ -298,7 +278,6 @@ const AdminDashboard = () => {
                     </div>
                 </div>
             </div>
-        </div>
     );
 };
 

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.QRCampaign = exports.MarketingCoupon = exports.MediaItem = exports.AdCampaign = exports.TenantWithdrawal = exports.TenantDocument = exports.TestAccountSeed = exports.SandboxPaymentLog = exports.SandboxMessageLog = exports.StagingErrorLog = exports.FeatureFlag = exports.SmsLedgerTransaction = exports.SmsProcurementTask = exports.SmsFinancialLedger = exports.SmsCampaignMessage = exports.SmsTransaction = exports.TenantSmsWallet = exports.SmsPackage = exports.SmsGateway = exports.DormantRouterPolicy = exports.RouterConnectionLog = exports.CampaignLog = exports.MessageTemplate = exports.Campaign = exports.PasswordResetToken = exports.PlatformFee = exports.PlatformWallet = exports.TieredFee = exports.WalletTransaction = exports.PlatformTransaction = exports.SMSLog = exports.FraudLog = exports.Voucher = exports.AdminSession = exports.Session = exports.Payment = exports.PlatformSetting = exports.AuditLog = exports.Settlement = exports.Wallet = exports.Invoice = exports.Subscriber = exports.DeviceBinding = exports.SubscriberGroup = exports.Package = exports.DowntimeRecord = exports.RouterIncident = exports.Router = exports.AdminUser = exports.Tenant = void 0;
-exports.PaymentVerificationAudit = exports.sequelize = exports.PaymentLog = exports.MpesaCallbackLog = exports.SaaSSubscriptionPayment = exports.RadiusPolicy = exports.RadPostAuth = exports.RadAcct = exports.RadUserGroup = exports.RadGroupReply = exports.RadGroupCheck = exports.RadReply = exports.RadCheck = exports.Nas = exports.EnterpriseQuote = exports.EnterpriseLead = exports.PlatformBranding = exports.RefundAuditLog = exports.CompensationRule = exports.RefundRequest = exports.SaaSNotification = exports.SaaSPayment = exports.SaaSInvoiceItem = exports.SaaSInvoice = exports.TenantAddonModule = exports.TenantCaptivePortalBranding = exports.FeatureViolationLog = exports.TrialAgreement = exports.TenantSubscription = exports.PlatformPricingConfig = exports.SubscriptionPlan = exports.MarketingSetting = exports.CustomerSegment = exports.AdAnalytic = exports.MarketingLandingPage = void 0;
+exports.PppoeRequest = exports.PaymentVerificationAudit = exports.sequelize = exports.PaymentLog = exports.MpesaCallbackLog = exports.SaaSSubscriptionPayment = exports.RadiusPolicy = exports.RadPostAuth = exports.RadAcct = exports.RadUserGroup = exports.RadGroupReply = exports.RadGroupCheck = exports.RadReply = exports.RadCheck = exports.Nas = exports.EnterpriseQuote = exports.EnterpriseLead = exports.PlatformBranding = exports.RefundAuditLog = exports.CompensationRule = exports.RefundRequest = exports.SaaSNotification = exports.SaaSPayment = exports.SaaSInvoiceItem = exports.SaaSInvoice = exports.TenantAddonModule = exports.TenantCaptivePortalBranding = exports.FeatureViolationLog = exports.TrialAgreement = exports.TenantSubscription = exports.PlatformPricingConfig = exports.SubscriptionPlan = exports.MarketingSetting = exports.CustomerSegment = exports.AdAnalytic = exports.MarketingLandingPage = void 0;
 const sequelize_1 = require("sequelize");
 const env_1 = require("../config/env");
 const encryption_1 = require("../utils/encryption");
@@ -401,7 +401,7 @@ Package.init({
     speedLimit: { type: sequelize_1.DataTypes.STRING, allowNull: true },
     isEnabled: { type: sequelize_1.DataTypes.BOOLEAN, defaultValue: true },
     tenantId: { type: sequelize_1.DataTypes.UUID, allowNull: false },
-    type: { type: sequelize_1.DataTypes.ENUM('HOTSPOT', 'ISP'), defaultValue: 'HOTSPOT' },
+    type: { type: sequelize_1.DataTypes.ENUM('HOTSPOT', 'ISP', 'PPPOE', 'PPPoE', 'VOUCHER'), defaultValue: 'HOTSPOT' },
     // Enhanced MikroTik fields
     description: { type: sequelize_1.DataTypes.TEXT },
     validity: { type: sequelize_1.DataTypes.INTEGER }, // Days
@@ -2134,9 +2134,33 @@ PaymentVerificationAudit.init({
     modelName: 'PaymentVerificationAudit',
     tableName: 'payment_verification_audits'
 });
+// PppoeRequest Model for PPPoE Connection Applications / Leads
+class PppoeRequest extends sequelize_1.Model {
+}
+exports.PppoeRequest = PppoeRequest;
+PppoeRequest.init({
+    id: { type: sequelize_1.DataTypes.UUID, defaultValue: sequelize_1.DataTypes.UUIDV4, primaryKey: true },
+    tenantId: { type: sequelize_1.DataTypes.STRING, allowNull: true },
+    routerId: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+    fullName: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+    phone: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+    email: { type: sequelize_1.DataTypes.STRING, allowNull: true },
+    location: { type: sequelize_1.DataTypes.STRING, allowNull: false },
+    packageId: { type: sequelize_1.DataTypes.STRING, allowNull: true },
+    packageName: { type: sequelize_1.DataTypes.STRING, allowNull: true },
+    pppoeUsername: { type: sequelize_1.DataTypes.STRING, allowNull: true },
+    pppoePassword: { type: sequelize_1.DataTypes.STRING, allowNull: true },
+    status: { type: sequelize_1.DataTypes.STRING, allowNull: false, defaultValue: 'PENDING' },
+    adminNotes: { type: sequelize_1.DataTypes.TEXT, allowNull: true }
+}, {
+    sequelize,
+    modelName: 'PppoeRequest',
+    tableName: 'pppoe_requests'
+});
 // RADIUS Relationships
 Nas.belongsTo(Tenant, { foreignKey: 'tenantId' });
 RadiusPolicy.belongsTo(Tenant, { foreignKey: 'tenantId' });
 SaaSSubscriptionPayment.belongsTo(Tenant, { foreignKey: 'tenantId' });
 PaymentLog.belongsTo(Tenant, { foreignKey: 'tenantId', constraints: false });
 PaymentVerificationAudit.belongsTo(Tenant, { foreignKey: 'tenantId', constraints: false });
+PppoeRequest.belongsTo(Tenant, { foreignKey: 'tenantId', constraints: false });

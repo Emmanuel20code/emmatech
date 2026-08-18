@@ -38,6 +38,7 @@ const Packages = () => {
     const [editingPackage, setEditingPackage] = useState<Package | null>(null);
     const [syncingId, setSyncingId] = useState<number | null>(null);
     const [error, setError] = useState('');
+    const [packageTypeFilter, setPackageTypeFilter] = useState<'ALL' | 'HOTSPOT' | 'PPPOE'>('ALL');
 
     // Live Captive Portal Preview State
     const [showLivePreview, setShowLivePreview] = useState(true);
@@ -665,6 +666,34 @@ const Packages = () => {
                         </div>
                     </div>
 
+                    {/* Separation / Isolation Tabs */}
+                    <div className="px-4 sm:px-10 py-4 border-b border-white/5 bg-slate-950/40 flex items-center gap-3 flex-wrap">
+                        <button
+                            onClick={() => setPackageTypeFilter('ALL')}
+                            className={`px-5 py-2.5 rounded-xl text-xs font-black transition cursor-pointer ${
+                                packageTypeFilter === 'ALL' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20' : 'bg-white/5 text-slate-400 hover:text-white'
+                            }`}
+                        >
+                            All Packages ({safePackages.length})
+                        </button>
+                        <button
+                            onClick={() => setPackageTypeFilter('HOTSPOT')}
+                            className={`px-5 py-2.5 rounded-xl text-xs font-black transition flex items-center gap-2 cursor-pointer ${
+                                packageTypeFilter === 'HOTSPOT' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20' : 'bg-white/5 text-slate-400 hover:text-white'
+                            }`}
+                        >
+                            <Wifi size={14} /> Hotspot Voucher Packages ({safePackages.filter(p => p.type === 'HOTSPOT').length})
+                        </button>
+                        <button
+                            onClick={() => setPackageTypeFilter('PPPOE')}
+                            className={`px-5 py-2.5 rounded-xl text-xs font-black transition flex items-center gap-2 cursor-pointer ${
+                                packageTypeFilter === 'PPPOE' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20' : 'bg-white/5 text-slate-400 hover:text-white'
+                            }`}
+                        >
+                            <Database size={14} /> PPPoE / ISP Fixed Packages ({safePackages.filter(p => p.type === 'ISP' || p.type === 'PPPOE' || p.type === 'PPPoE').length})
+                        </button>
+                    </div>
+
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse min-w-[640px]">
                             <thead>
@@ -677,7 +706,11 @@ const Packages = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/5">
-                                {safePackages.map((pkg) => (
+                                {safePackages.filter(pkg => {
+                                    if (packageTypeFilter === 'HOTSPOT') return pkg.type === 'HOTSPOT';
+                                    if (packageTypeFilter === 'PPPOE') return pkg.type === 'ISP' || pkg.type === 'PPPOE' || pkg.type === 'PPPoE';
+                                    return true;
+                                }).map((pkg) => (
                                     <tr key={pkg.id} className="hover:bg-white/5 transition-colors group">
                                         <td className="px-4 sm:px-10 py-6 sm:py-8">
                                             <div className="flex items-center gap-4">

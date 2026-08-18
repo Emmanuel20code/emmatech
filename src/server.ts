@@ -327,6 +327,9 @@ async function startServer() {
             try { await sequelize.query('ALTER TABLE "packages" ADD COLUMN IF NOT EXISTS "mikrotikProfile" VARCHAR(255);'); } catch (_) {}
             try { await sequelize.query('ALTER TABLE "packages" ADD COLUMN IF NOT EXISTS "limitAtTime" VARCHAR(255);'); } catch (_) {}
             try { await sequelize.query('ALTER TABLE "packages" ADD COLUMN IF NOT EXISTS "parentQueue" VARCHAR(255);'); } catch (_) {}
+            try { await sequelize.query(`ALTER TYPE enum_packages_type ADD VALUE IF NOT EXISTS 'PPPOE';`); } catch (_) {}
+            try { await sequelize.query(`ALTER TYPE enum_packages_type ADD VALUE IF NOT EXISTS 'PPPoE';`); } catch (_) {}
+            try { await sequelize.query(`ALTER TYPE enum_packages_type ADD VALUE IF NOT EXISTS 'VOUCHER';`); } catch (_) {}
             
             // Fix missing columns for TenantCaptivePortalBranding
             try { await sequelize.query('ALTER TABLE "tenant_captive_portal_brandings" ADD COLUMN IF NOT EXISTS "landingHeroTitle" VARCHAR(255);'); } catch (_) {}

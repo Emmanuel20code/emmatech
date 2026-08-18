@@ -3,7 +3,7 @@ import {
     Activity, Users, Shield, Plus, Trash2, Power, 
     Search, RefreshCw, AlertCircle, CheckCircle2,
     Clock, Globe, Lock, Key, CreditCard, ChevronRight,
-    Server, Terminal, Settings
+    Server, Terminal, Settings, ArrowLeft
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
@@ -41,10 +41,24 @@ interface PPPoEProfile {
     comment: string;
 }
 
+interface PppoeRequestItem {
+    id: string;
+    fullName: string;
+    phone: string;
+    email?: string;
+    location: string;
+    packageName?: string;
+    pppoeUsername?: string;
+    pppoePassword?: string;
+    status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'PROVISIONED';
+    adminNotes?: string;
+    createdAt: string;
+}
+
 const PPPoEManagement = () => {
     const { routerId } = useParams<{ routerId: string }>();
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState<'secrets' | 'sessions' | 'profiles'>('secrets');
+    const [activeTab, setActiveTab] = useState<'secrets' | 'sessions' | 'profiles' | 'requests'>('secrets');
     const [loading, setLoading] = useState(true);
     const [actionLoading, setActionLoading] = useState(false);
     const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
@@ -54,6 +68,7 @@ const PPPoEManagement = () => {
     const [secrets, setSecrets] = useState<PPPoESecret[]>([]);
     const [sessions, setSessions] = useState<PPPoESession[]>([]);
     const [profiles, setProfiles] = useState<PPPoEProfile[]>([]);
+    const [requests, setRequests] = useState<PppoeRequestItem[]>([]);
     const [routerName, setRouterName] = useState('');
 
     // Modal state
@@ -69,17 +84,18 @@ const PPPoEManagement = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const [secretsRes, sessionsRes, profilesRes] = await Promise.all([
+            const [secretsRes, sessionsRes, profilesRes, requestsRes] = await Promise.all([
                 axios.get(`/api/v1/routers/${routerId}/pppoe/secrets`),
                 axios.get(`/api/v1/routers/${routerId}/pppoe/sessions`),
-                axios.get(`/api/v1/routers/${routerId}/pppoe/profiles`)
+                axios.get(`/api/v1/routers/${routerId}/pppoe/profiles`),
+                axios.get(`/api/v1/routers/${routerId}/pppoe/requests`)
             ]);
             
             setSecrets(secretsRes.data.secrets || []);
             setSessions(sessionsRes.data.sessions || []);
             setProfiles(profilesRes.data.profiles || []);
+            setRequests(requestsRes.data.requests || []);
             
-            // Get router info from another endpoint if needed, for now use breadcrumb logic
             const routerRes = await axios.get(`/api/v1/routers/${routerId}/resources`).catch(() => ({ data: { resources: { identity: 'MikroTik' } } }));
             setRouterName(routerRes.data?.resources?.identity || 'MikroTik Router');
             
@@ -87,6 +103,32 @@ const PPPoEManagement = () => {
             setFeedback({ type: 'error', message: 'Failed to connect to router. Ensure it is online and API is enabled.' });
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleApproveRequest = async (reqId: string) => {
+        setActionLoading(true);
+        try {
+            await axios.put(`/api/v1/routers/${routerId}/pppoe/requests/${reqId}/approve`);
+            setFeedback({ type: 'success', message: 'PPPoE connection request approved and auto-provisioned successfully on MikroTik!' });
+            fetchData();
+        } catch (err: any) {
+            setFeedback({ type: 'error', message: err.response?.data?.error || 'Failed to approve request' });
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
+    const handleRejectRequest = async (reqId: string) => {
+        setActionLoading(true);
+        try {
+            await axios.put(`/api/v1/routers/${routerId}/pppoe/requests/${reqId}/reject`, { reason: 'Application rejected' });
+            setFeedback({ type: 'success', message: 'PPPoE connection request rejected.' });
+            fetchData();
+        } catch (err: any) {
+            setFeedback({ type: 'error', message: err.response?.data?.error || 'Failed to reject request' });
+        } finally {
+            setActionLoading(false);
         }
     };
 
@@ -162,13 +204,21 @@ const PPPoEManagement = () => {
 
     return (
         <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-8 font-sans min-h-screen text-slate-200">
-            {/* Breadcrumbs */}
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest">
-                <button onClick={() => navigate('/routers')} className="hover:text-sky-400 transition">Routers</button>
-                <ChevronRight size={14} />
-                <button onClick={() => navigate(`/routers/${routerId}`)} className="hover:text-sky-400 transition">{routerName}</button>
-                <ChevronRight size={14} />
-                <span className="text-white">PPPoE Logic</span>
+            {/* Back Button & Breadcrumbs */}
+            <div className="flex items-center justify-between flex-wrap gap-4">
+                <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest">
+                    <button onClick={() => navigate('/routers')} className="hover:text-sky-400 transition">Routers</button>
+                    <ChevronRight size={14} />
+                    <button onClick={() => navigate(`/routers/${routerId}`)} className="hover:text-sky-400 transition">{routerName}</button>
+                    <ChevronRight size={14} />
+                    <span className="text-white">PPPoE Logic</span>
+                </div>
+                <button
+                    onClick={() => navigate(`/routers/${routerId}`)}
+                    className="px-4 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white rounded-xl transition flex items-center gap-2 text-xs font-black uppercase tracking-wider"
+                >
+                    <ArrowLeft size={14} /> Back to Router
+                </button>
             </div>
 
             {/* Header */}
@@ -218,7 +268,8 @@ const PPPoEManagement = () => {
                 {[
                     { id: 'secrets', label: 'PPP Secrets', icon: Lock },
                     { id: 'sessions', label: 'Active Sessions', icon: Activity },
-                    { id: 'profiles', label: 'Profiles', icon: Settings }
+                    { id: 'profiles', label: 'Profiles', icon: Settings },
+                    { id: 'requests', label: 'Connection Requests', icon: Users }
                 ].map(tab => (
                     <button
                         key={tab.id}
@@ -233,6 +284,9 @@ const PPPoEManagement = () => {
                         {tab.label}
                         {tab.id === 'sessions' && sessions.length > 0 && (
                             <span className="ml-1 px-1.5 py-0.5 bg-sky-500 text-slate-950 rounded-md text-[10px]">{sessions.length}</span>
+                        )}
+                        {tab.id === 'requests' && requests.filter(r => r.status === 'PENDING').length > 0 && (
+                            <span className="ml-1 px-1.5 py-0.5 bg-amber-500 text-slate-950 rounded-md text-[10px]">{requests.filter(r => r.status === 'PENDING').length}</span>
                         )}
                     </button>
                 ))}
@@ -361,7 +415,7 @@ const PPPoEManagement = () => {
                                 </tbody>
                             </table>
                         </motion.div>
-                    ) : (
+                    ) : activeTab === 'profiles' ? (
                         <motion.div 
                             key="profiles"
                             initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}
@@ -399,6 +453,98 @@ const PPPoEManagement = () => {
                                     </div>
                                 </div>
                             ))}
+                        </motion.div>
+                    ) : (
+                        <motion.div 
+                            key="requests"
+                            initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}
+                            className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl"
+                        >
+                            <div className="p-6 border-b border-slate-800 flex justify-between items-center">
+                                <div>
+                                    <h3 className="font-black text-white text-lg">PPPoE Connection Requests & Applications</h3>
+                                    <p className="text-xs text-slate-400">Approve pending applications to auto-provision PPPoE secrets on MikroTik</p>
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        const name = prompt("Enter customer full name:");
+                                        const phone = prompt("Enter phone number:");
+                                        const location = prompt("Enter home address / location:");
+                                        if (name && phone && location) {
+                                            axios.post('/api/v1/pppoe/requests', { routerId, fullName: name, phone, location, packageName: 'Fiber Home Standard' })
+                                                .then(() => { setFeedback({ type: 'success', message: 'Test PPPoE request created!' }); fetchData(); })
+                                                .catch(err => setFeedback({ type: 'error', message: err.response?.data?.error || 'Failed' }));
+                                        }
+                                    }}
+                                    className="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-black transition cursor-pointer"
+                                >
+                                    + Submit Test Request
+                                </button>
+                            </div>
+                            <table className="w-full text-left border-collapse">
+                                <thead className="bg-slate-950 border-b border-slate-800">
+                                    <tr>
+                                        <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Customer</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Location / Contact</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Package</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                                        <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-800/50">
+                                    {requests.map(req => (
+                                        <tr key={req.id} className="hover:bg-slate-800/30 transition group">
+                                            <td className="px-6 py-4">
+                                                <div className="font-black text-white">{req.fullName}</div>
+                                                <div className="text-[10px] text-slate-500 font-mono">ID: {req.id.slice(0, 8)}</div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="text-xs font-bold text-slate-300">{req.location}</div>
+                                                <div className="text-[10px] text-sky-400 font-mono">{req.phone} {req.email ? `• ${req.email}` : ''}</div>
+                                            </td>
+                                            <td className="px-6 py-4 text-xs font-bold text-emerald-400">{req.packageName || 'PPPoE Standard'}</td>
+                                            <td className="px-6 py-4">
+                                                <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                                                    req.status === 'PROVISIONED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                                    req.status === 'APPROVED' ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20' :
+                                                    req.status === 'REJECTED' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
+                                                    'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                                                }`}>
+                                                    {req.status}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4 text-right space-x-2">
+                                                {req.status === 'PENDING' && (
+                                                    <>
+                                                        <button
+                                                            onClick={() => handleApproveRequest(req.id)}
+                                                            disabled={actionLoading}
+                                                            className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-[10px] font-black uppercase transition cursor-pointer shadow-lg shadow-emerald-600/20"
+                                                        >
+                                                            Approve & Provision
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleRejectRequest(req.id)}
+                                                            disabled={actionLoading}
+                                                            className="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white rounded-lg text-[10px] font-black uppercase transition cursor-pointer"
+                                                        >
+                                                            Reject
+                                                        </button>
+                                                    </>
+                                                )}
+                                                {req.status === 'PROVISIONED' && (
+                                                    <span className="text-xs text-slate-500 font-mono">User: {req.pppoeUsername}</span>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {requests.length === 0 && (
+                                        <tr>
+                                            <td colSpan={5} className="px-6 py-12 text-center text-slate-500 font-bold italic">No PPPoE connection requests found</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
                         </motion.div>
                     )}
                 </AnimatePresence>

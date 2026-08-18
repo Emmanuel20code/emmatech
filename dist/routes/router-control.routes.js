@@ -603,4 +603,115 @@ router.delete('/:id/files/:fileId', auth_1.authMiddleware, async (req, res) => {
         res.status(500).json({ error: 'Failed to delete file', message: error.message });
     }
 });
+/**
+ * GET /api/v1/routers/:id/pppoe/requests
+ * List all PPPoE connection requests for this router
+ */
+router.get('/:id/pppoe/requests', auth_1.authMiddleware, async (req, res) => {
+    try {
+        const tenantId = req.user.tenantId;
+        const routerId = ensureString(req.params.id);
+        const routerRecord = await getRouter(routerId, tenantId);
+        if (!routerRecord)
+            return res.status(404).json({ error: 'Router not found' });
+        const requests = await models_1.PppoeRequest.findAll({
+            where: { routerId, ...(tenantId ? { tenantId } : {}) },
+            order: [['createdAt', 'DESC']]
+        });
+        res.json({ requests, total: requests.length });
+    }
+    catch (error) {
+        logger_1.default.error('Failed to list PPPoE requests', { error: error.message });
+        res.status(500).json({ error: 'Failed to list PPPoE requests', message: error.message });
+    }
+});
+/**
+ * POST /api/v1/pppoe/requests
+ * Submit a new PPPoE connection application / request (public or portal)
+ */
+router.post('/pppoe/requests', async (req, res) => {
+    try {
+        const { routerId, fullName, phone, email, location, packageId, packageName } = req.body;
+        if (!routerId || !fullName || !phone || !location) {
+            return res.status(400).json({ error: 'Missing required fields: routerId, fullName, phone, location' });
+        }
+        const routerRecord = await models_1.Router.findByPk(routerId);
+        if (!routerRecord)
+            return res.status(404).json({ error: 'Router not found' });
+        const newRequest = await models_1.PppoeRequest.create({
+            tenantId: routerRecord.tenantId,
+            routerId,
+            fullName,
+            phone,
+            email: email || null,
+            location,
+            packageId: packageId || null,
+            packageName: packageName || 'Standard PPPoE Fiber',
+            status: 'PENDING'
+        });
+        res.json({ success: true, message: 'PPPoE connection request submitted successfully', request: newRequest });
+    }
+    catch (error) {
+        logger_1.default.error('Failed to submit PPPoE request', { error: error.message });
+        res.status(500).json({ error: 'Failed to submit PPPoE request', message: error.message });
+    }
+});
+/**
+ * PUT /api/v1/routers/:id/pppoe/requests/:requestId/approve
+ * Approve PPPoE request and auto-provision secret on MikroTik router
+ */
+router.put('/:id/pppoe/requests/:requestId/approve', auth_1.authMiddleware, async (req, res) => {
+    try {
+        const tenantId = req.user.tenantId;
+        const routerId = ensureString(req.params.id);
+        const requestId = ensureString(req.params.requestId);
+        const routerRecord = await getRouter(routerId, tenantId);
+        if (!routerRecord)
+            return res.status(404).json({ error: 'Router not found' });
+        const pppoeReq = await models_1.PppoeRequest.findOne({ where: { id: requestId, routerId } });
+        if (!pppoeReq)
+            return res.status(404).json({ error: 'PPPoE request not found' });
+        // Generate clean username & password if not provided
+        const username = pppoeReq.pppoeUsername || `fib_${pppoeReq.phone.slice(-6)}`;
+        const password = pppoeReq.pppoePassword || `Pass${Math.floor(1000 + Math.random() * 9000)}`;
+        // Provision on MikroTik
+        await mikrotik_service_1.MikroTikService.createPPPoESecret(routerRecord, username, password, 'pppoe', 'default', `Approved Fiber for ${pppoeReq.fullName} (${pppoeReq.phone})`);
+        pppoeReq.status = 'PROVISIONED';
+        pppoeReq.pppoeUsername = username;
+        pppoeReq.pppoePassword = password;
+        pppoeReq.adminNotes = 'Approved and auto-provisioned on MikroTik';
+        await pppoeReq.save();
+        res.json({ success: true, message: 'PPPoE request approved and auto-provisioned successfully', username, password });
+    }
+    catch (error) {
+        logger_1.default.error('Failed to approve PPPoE request', { error: error.message });
+        res.status(500).json({ error: 'Failed to approve PPPoE request', message: error.message });
+    }
+});
+/**
+ * PUT /api/v1/routers/:id/pppoe/requests/:requestId/reject
+ * Reject PPPoE request
+ */
+router.put('/:id/pppoe/requests/:requestId/reject', auth_1.authMiddleware, async (req, res) => {
+    try {
+        const tenantId = req.user.tenantId;
+        const routerId = ensureString(req.params.id);
+        const requestId = ensureString(req.params.requestId);
+        const { reason } = req.body;
+        const routerRecord = await getRouter(routerId, tenantId);
+        if (!routerRecord)
+            return res.status(404).json({ error: 'Router not found' });
+        const pppoeReq = await models_1.PppoeRequest.findOne({ where: { id: requestId, routerId } });
+        if (!pppoeReq)
+            return res.status(404).json({ error: 'PPPoE request not found' });
+        pppoeReq.status = 'REJECTED';
+        pppoeReq.adminNotes = reason || 'Rejected by administrator';
+        await pppoeReq.save();
+        res.json({ success: true, message: 'PPPoE request rejected successfully' });
+    }
+    catch (error) {
+        logger_1.default.error('Failed to reject PPPoE request', { error: error.message });
+        res.status(500).json({ error: 'Failed to reject PPPoE request', message: error.message });
+    }
+});
 exports.default = router;

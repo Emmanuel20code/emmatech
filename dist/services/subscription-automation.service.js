@@ -377,9 +377,15 @@ class SubscriptionAutomationService {
             if (targetRouterId) {
                 try {
                     const router = await models_1.Router.findByPk(targetRouterId);
-                    if (router && subscriber?.pppoeUsername) {
-                        // ISP PPPoE Secret enable
-                        await mikrotik_service_1.MikroTikService.toggleHotspotUser(router, subscriber.pppoeUsername, true);
+                    if (router && subscriber) {
+                        if (subscriber.pppoeUsername) {
+                            // Enable PPPoE secret and disconnect stale session so user reconnects immediately
+                            await mikrotik_service_1.MikroTikService.togglePPPoESecret(router, subscriber.pppoeUsername, true);
+                            await mikrotik_service_1.MikroTikService.disconnectPPPoEUser(router, subscriber.pppoeUsername).catch(() => { });
+                        }
+                        else if (subscriber.username) {
+                            await mikrotik_service_1.MikroTikService.toggleHotspotUser(router, subscriber.username, true);
+                        }
                     }
                 }
                 catch (routerErr) {

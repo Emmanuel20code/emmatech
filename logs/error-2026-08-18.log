@@ -1,0 +1,1 @@
+{"environment":"development","error":"invalid input value for enum enum_packages_type: \"PPPOE\"","level":"error","message":"Package creation failed","service":"billing-system","timestamp":"2026-08-18 09:16:37"}
