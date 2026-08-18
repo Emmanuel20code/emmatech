@@ -7,6 +7,7 @@ import {
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ResponsiveLayout from '../components/Modern/ResponsiveLayout';
+import BackButton from '../components/Common/BackButton';
 
 interface RouterItem {
     id: string;
@@ -76,6 +77,7 @@ export default function PPPoEManagerHub() {
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showPackageModal, setShowPackageModal] = useState(false);
+    const [editingPackageId, setEditingPackageId] = useState<string | number | null>(null);
 
     const [newSecret, setNewSecret] = useState({
         username: '',
@@ -220,17 +222,58 @@ export default function PPPoEManagerHub() {
         if (!newPackage.name || !newPackage.price) return;
         setActionLoading(true);
         try {
-            await axios.post('/api/v1/admin/packages', newPackage);
-            setFeedback({ type: 'success', message: `PPPoE package/tier "${newPackage.name}" created successfully!` });
+            if (editingPackageId) {
+                await axios.put(`/api/v1/admin/packages/${editingPackageId}`, newPackage).catch(() => axios.put(`/api/v1/packages/${editingPackageId}`, newPackage));
+                setFeedback({ type: 'success', message: `PPPoE package/tier "${newPackage.name}" updated successfully!` });
+            } else {
+                await axios.post('/api/v1/admin/packages', newPackage).catch(() => axios.post('/api/v1/packages', newPackage));
+                setFeedback({ type: 'success', message: `PPPoE package/tier "${newPackage.name}" created successfully!` });
+            }
             setShowPackageModal(false);
+            setEditingPackageId(null);
             setNewPackage({ name: '', price: 1500, downloadSpeed: '10M', uploadSpeed: '10M', validity: 30, type: 'PPPOE', description: '' });
             fetchPackages();
         } catch (err: any) {
-            const created = { id: Date.now(), ...newPackage, isEnabled: true };
-            setPackages([...packages, created]);
-            setFeedback({ type: 'success', message: `PPPoE package "${newPackage.name}" added successfully!` });
+            if (editingPackageId) {
+                setPackages(packages.map(p => p.id === editingPackageId ? { ...p, ...newPackage } : p));
+                setFeedback({ type: 'success', message: `PPPoE package "${newPackage.name}" updated successfully (local mode)!` });
+            } else {
+                const created = { id: Date.now(), ...newPackage, isEnabled: true };
+                setPackages([...packages, created]);
+                setFeedback({ type: 'success', message: `PPPoE package "${newPackage.name}" added successfully (local mode)!` });
+            }
             setShowPackageModal(false);
+            setEditingPackageId(null);
             setNewPackage({ name: '', price: 1500, downloadSpeed: '10M', uploadSpeed: '10M', validity: 30, type: 'PPPOE', description: '' });
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
+    const handleEditPackage = (pkg: PPPoEPackage) => {
+        setEditingPackageId(pkg.id);
+        setNewPackage({
+            name: pkg.name,
+            price: pkg.price,
+            downloadSpeed: pkg.downloadSpeed || '10M',
+            uploadSpeed: pkg.uploadSpeed || '10M',
+            validity: pkg.validity || 30,
+            type: pkg.type || 'PPPOE',
+            description: pkg.description || ''
+        });
+        setShowPackageModal(true);
+    };
+
+    const handleDeletePackage = async (id: string | number) => {
+        if (!window.confirm('Are you sure you want to delete this PPPoE package?')) return;
+        setActionLoading(true);
+        try {
+            await axios.delete(`/api/v1/admin/packages/${id}`).catch(() => axios.delete(`/api/v1/packages/${id}`));
+            setFeedback({ type: 'success', message: 'Package deleted successfully.' });
+            fetchPackages();
+        } catch (err: any) {
+            setPackages(packages.filter(p => p.id !== id));
+            setFeedback({ type: 'success', message: 'Package deleted (local mode).' });
         } finally {
             setActionLoading(false);
         }
@@ -291,6 +334,9 @@ export default function PPPoEManagerHub() {
                 {/* Header & Router Selector */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <div>
+                        <div className="mb-4">
+                            <BackButton to="/tenant" label="Dashboard" variant="dark" />
+                        </div>
                         <div className="flex items-center gap-3">
                             <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-600">
                                 <Globe className="w-6 h-6" />
@@ -613,12 +659,13 @@ export default function PPPoEManagerHub() {
                                         <th className="px-6 py-3.5">Download / Upload Speed</th>
                                         <th className="px-6 py-3.5">Validity (Days)</th>
                                         <th className="px-6 py-3.5">Description</th>
+                                        <th className="px-6 py-3.5 text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-200 text-xs text-slate-700">
                                     {packages.length === 0 ? (
                                         <tr>
-                                            <td colSpan={5} className="px-6 py-16 text-center text-slate-400 font-medium italic">
+                                            <td colSpan={6} className="px-6 py-16 text-center text-slate-400 font-medium italic">
                                                 No PPPoE packages or tiers found. Click "Add PPPoE Package" to create one.
                                             </td>
                                         </tr>
@@ -634,6 +681,20 @@ export default function PPPoEManagerHub() {
                                                 </td>
                                                 <td className="px-6 py-4 font-medium">{pkg.validity || 30} Days</td>
                                                 <td className="px-6 py-4 text-slate-500">{pkg.description || 'Broadband Fiber Plan'}</td>
+                                                <td className="px-6 py-4 text-right space-x-2">
+                                                    <button
+                                                        onClick={() => handleEditPackage(pkg)}
+                                                        className="px-3 py-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-xs font-bold transition"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDeletePackage(pkg.id)}
+                                                        className="px-3 py-1.5 bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-lg text-xs font-bold transition"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </td>
                                             </tr>
                                         ))
                                     )}
@@ -731,7 +792,7 @@ export default function PPPoEManagerHub() {
                         <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-6">
                             <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                                 <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                                    <Zap className="w-5 h-5 text-amber-500" /> Create PPPoE Package / Tier
+                                    <Zap className="w-5 h-5 text-amber-500" /> {editingPackageId ? 'Edit' : 'Create'} PPPoE Package / Tier
                                 </h3>
                                 <button onClick={() => setShowPackageModal(false)} className="text-slate-400 hover:text-slate-600 font-bold">✕</button>
                             </div>
@@ -819,7 +880,7 @@ export default function PPPoEManagerHub() {
                                         disabled={actionLoading}
                                         className="px-5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-xl font-bold shadow transition flex items-center gap-2"
                                     >
-                                        {actionLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : 'Create Package'}
+                                        {actionLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : editingPackageId ? 'Update Package' : 'Create Package'}
                                     </button>
                                 </div>
                             </form>
