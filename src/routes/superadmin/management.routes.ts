@@ -434,6 +434,10 @@ router.post('/github/push', async (req: any, res) => {
         await execAsync('git config user.name "SuperAdmin"', { maxBuffer: 1024 * 1024 * 10 });
         await execAsync('git config user.email "admin@jevish.site"', { maxBuffer: 1024 * 1024 * 10 });
 
+        try {
+            await execAsync('git reset', { maxBuffer: 1024 * 1024 * 10 });
+        } catch (e) {}
+
         await execAsync('git add .', { maxBuffer: 1024 * 1024 * 10 });
 
         try {
