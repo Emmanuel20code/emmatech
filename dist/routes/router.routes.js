@@ -463,24 +463,24 @@ router.delete('/:id', async (req, res) => {
         if (!routerRecord) {
             return res.status(404).json({ error: 'Router not found' });
         }
-        // Generate rollback script
-        const rollbackScript = await mikrotik_auto_config_service_1.MikroTikAutoConfigService.generateRollbackScript(routerRecord);
-        // Log the disconnection
+        // Strict remote cleanup on physical router - NO FALLBACKS allowed
+        const remoteCleanupResult = await mikrotik_service_1.MikroTikService.cleanupRouterConfiguration(routerRecord);
+        // Log the disconnection & wipe
         await models_1.RouterConnectionLog.create({
             routerId: routerRecord.id,
             tenantId,
             action: 'DISCONNECT',
             status: 'SUCCESS',
-            details: 'Router removed from billing system',
+            details: 'Router removed and configuration wiped from device successfully (NO FALLBACKS)',
             userId
         });
-        // Delete router
+        // Delete router from DB only after successful physical device wipe
         await routerRecord.destroy();
         res.json({
             success: true,
-            message: 'Router removed successfully',
-            rollbackScript,
-            note: 'Optional: Run the rollback script on your router to remove Jevish configuration'
+            message: 'Router removed and configuration wiped successfully from device',
+            remoteCleanup: remoteCleanupResult,
+            note: 'Strict deletion completed successfully with NO FALLBACKS.'
         });
     }
     catch (error) {

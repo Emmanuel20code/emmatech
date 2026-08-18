@@ -980,5 +980,49 @@ export class MikroTikService {
             return { success: true };
         });
     }
+
+    /**
+     * Clean up Jevish configuration from router upon router deletion (Strict: NO FALLBACKS)
+     */
+    static async cleanupRouterConfiguration(router: RouterModel): Promise<{ success: boolean; message: string }> {
+        if (!router.host || router.host === '0.0.0.0' || router.host === '127.0.0.1' || router.host === 'localhost') {
+            throw new Error('Router is simulated or has no valid IP host. Remote cleanup failed as NO FALLBACKS are permitted.');
+        }
+        try {
+            return await this.executeWithRetry(async () => {
+                const client = await this.getConnection(router);
+                const api = await client.connect();
+
+                // Remove API user if created
+                const apiUser = router.apiUser || 'jevish_api';
+                const users = await api.menu('/user').where({ name: apiUser }).get();
+                for (const u of users) {
+                    await api.menu('/user').remove(u['.id']);
+                }
+
+                // Remove Firewall Filter Rules
+                const filters = await api.menu('/ip/firewall/filter').where({ comment: 'Jevish API Access' }).get();
+                for (const f of filters) {
+                    await api.menu('/ip/firewall/filter').remove(f['.id']);
+                }
+
+                // Remove Walled Gardens
+                const gardens = await api.menu('/ip/hotspot/walled-garden').get();
+                for (const g of gardens) {
+                    if (g.comment && (g.comment.includes('Jevish') || g.comment.includes('IntaSend') || g.comment.includes('M-Pesa'))) {
+                        await api.menu('/ip/hotspot/walled-garden').remove(g['.id']);
+                    }
+                }
+
+                await client.close();
+                await this.logRouterAction(router.id, router.tenantId, 'CLEANUP_ROUTER', 'SUCCESS', 'Router configuration cleaned up successfully');
+                return { success: true, message: 'Router configuration removed successfully from device' };
+            });
+        } catch (error: any) {
+            const errMsg = this.parseError(error);
+            logger.error('Failed to clean up router configuration remotely during strict deletion', { routerId: router.id, error: errMsg });
+            throw new Error(`Strict deletion failed: Could not reach router or remove config (${errMsg}). NO FALLBACKS allowed.`);
+        }
+    }
 }
 
