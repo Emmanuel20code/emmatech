@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 90
+    },
+    "auditLog": "/app/applet/logs/.d04c58680a0f6fbdb1332f3fbad1557eae263361-audit.json",
+    "files": [
+        {
+            "date": 1787030248764,
+            "name": "/app/applet/logs/audit-2026-08-18.log",
+            "hash": "9c716f21637833167dd943adae97efbf49e3d4be83ead690b434b4baaa35d2c1"
+        }
+    ],
+    "hashType": "sha256"
+}

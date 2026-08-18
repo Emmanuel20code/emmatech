@@ -1,0 +1,6 @@
+{
+  "name": "Emmatech WiFi Billing SaaS",
+  "description": "Multi-tenant WiFi billing and management system with M-Pesa integration and MikroTik API support.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

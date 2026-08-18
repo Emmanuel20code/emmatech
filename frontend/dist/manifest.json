@@ -1,0 +1,16 @@
+{
+  "name": "Jevish ISP & WiFi Billing",
+  "short_name": "Jevish",
+  "description": "Enterprise WiFi billing, MikroTik integration, and M-Pesa automated payments.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#0284c7",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png"
+    }
+  ]
+}
