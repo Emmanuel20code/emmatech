@@ -11,32 +11,9 @@ export interface AuthRequest extends Request {
     user?: UserAuth;
 }
 
-const attemptFallbackAuth = async (req: AuthRequest): Promise<boolean> => {
-    try {
-        const activeTenant = await Tenant.findOne({ where: { status: 'ACTIVE' }, order: [['createdAt', 'ASC']] });
-        const activeAdmin = await AdminUser.findOne({ order: [['createdAt', 'ASC']] });
-        if (activeTenant && activeAdmin) {
-            req.user = {
-                id: activeAdmin.id,
-                email: activeAdmin.email,
-                role: activeAdmin.role as any,
-                tenantId: activeAdmin.tenantId || activeTenant.id
-            };
-            return true;
-        }
-    } catch (err) {
-        logger.warn('Auth fallback error', { err });
-    }
-    return false;
-};
-
 export const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     if (!authHeader?.startsWith('Bearer ')) {
-        const fallbackSuccess = await attemptFallbackAuth(req);
-        if (fallbackSuccess) {
-            return next();
-        }
         return res.status(401).json({ error: 'Missing or malformed Authorization header' });
     }
 
@@ -55,18 +32,14 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
                 tokenType = 'SUPER_ADMIN';
             } catch (e) {
                 logger.warn('Auth Failure: Invalid token signature', { ip: req.ip });
-                const fallbackSuccess = await attemptFallbackAuth(req);
-                if (fallbackSuccess) {
-                    return next();
-                }
-                throw new Error('Invalid token signature');
+                return res.status(401).json({ error: 'Invalid token signature' });
             }
         }
 
         // Strict Role Check based on Secret used
         if (tokenType === 'SUPER_ADMIN' && decoded.role !== 'SUPER_ADMIN' && decoded.role !== 'PLATFORM_OWNER') {
             logger.warn('Auth Failure: Role mismatch', { role: decoded.role, tokenType });
-            throw new Error('Role mismatch for token type');
+            return res.status(401).json({ error: 'Role mismatch for token type' });
         }
 
         // Check session validity
@@ -81,10 +54,6 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
                 role: decoded.role,
                 tokenType
             });
-            const fallbackSuccess = await attemptFallbackAuth(req);
-            if (fallbackSuccess) {
-                return next();
-            }
             return res.status(401).json({ error: 'Session expired or revoked' });
         }
 
@@ -92,37 +61,11 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
         if (new Date() > new Date(session.expiryTime)) {
             logger.warn('Auth Failure: Session expired', { expiry: session.expiryTime });
             await session.update({ status: 'EXPIRED' });
-            const fallbackSuccess = await attemptFallbackAuth(req);
-            if (fallbackSuccess) {
-                return next();
-            }
             return res.status(401).json({ error: 'Session expired' });
         }
 
         // Update last activity
         await session.update({ lastActivity: new Date() });
-
-        // Resolve a valid tenant ID context for Super Admins and Platform Owners so their database queries/writes succeed
-        if (decoded && (decoded.role === 'SUPER_ADMIN' || decoded.role === 'PLATFORM_OWNER') && !decoded.tenantId) {
-            try {
-                let tenantId = req.headers?.['x-tenant-id'] || req.headers?.['X-Tenant-Id'] || req.query?.tenantId || req.body?.tenantId;
-                if (!tenantId) {
-                    const activeTenant = await Tenant.findOne({ where: { status: 'ACTIVE' }, order: [['createdAt', 'ASC']] });
-                    if (activeTenant) {
-                        tenantId = activeTenant.id;
-                    }
-                }
-                if (tenantId) {
-                    decoded.tenantId = tenantId as string;
-                    (req as any).tenantId = tenantId as string;
-                }
-            } catch (err: any) {
-                logger.warn('Error resolving default tenant for SuperAdmin in authMiddleware', { 
-                    error: err?.message, 
-                    stack: err?.stack 
-                });
-            }
-        }
 
         req.user = decoded;
 
@@ -149,11 +92,6 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
                 details: `Failed authentication from IP: ${req.ip}`,
                 ipAddress: req.ip
             });
-        }
-
-        const fallbackSuccess = await attemptFallbackAuth(req);
-        if (fallbackSuccess) {
-            return next();
         }
 
         return res.status(401).json({ error: 'Invalid or expired token' });
