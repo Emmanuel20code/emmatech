@@ -211,7 +211,7 @@ router.post('/:tenantId/pay', async (req, res) => {
                 amount: pkg.price,
                 package: pkg.name
             });
-            const paymentResult = await mpesa_service_1.MpesaService.initiateStkPush(formattedPhone, Number(pkg.price), actualTenantId, subscriberId || 'guest', String(pkg.id));
+            const paymentResult = await mpesa_service_1.MpesaService.initiateStkPush(formattedPhone, Number(pkg.price), actualTenantId, subscriberId || 'guest', String(pkg.id), req);
             const checkoutId = paymentResult.checkoutRequestId || paymentResult.CheckoutRequestID || `STK-${Date.now()}`;
             await payment.update({ checkoutRequestId: checkoutId });
             return res.json({

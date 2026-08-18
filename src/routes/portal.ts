@@ -242,7 +242,8 @@ router.post('/:tenantId/pay', async (req: any, res: any) => {
                 Number(pkg.price),
                 actualTenantId,
                 subscriberId || 'guest',
-                String(pkg.id)
+                String(pkg.id),
+                req
             );
 
             const checkoutId = paymentResult.checkoutRequestId || paymentResult.CheckoutRequestID || `STK-${Date.now()}`;

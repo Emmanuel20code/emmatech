@@ -62,7 +62,7 @@ export class MpesaService {
         }
 
         if (!callbackBase || callbackBase.includes('localhost') || callbackBase.includes('127.0.0.1')) {
-            callbackBase = process.env.MPESA_CALLBACK_BASE_URL || config.app.url || 'https://ais-dev-brrp7uv5khdrix2cw24irx-164318647384.europe-west2.run.app';
+            callbackBase = process.env.MPESA_CALLBACK_BASE_URL || config.app.url || 'https://ais-dev-rrrw5fw3ibuhz3wldvwzie-342377543254.europe-west3.run.app';
         }
 
         // Ensure https
@@ -363,7 +363,7 @@ export class MpesaService {
      * Initiates live STK Push for Wi-Fi Hotspot or ISP Client Checkout
      * Uses Master M-Pesa Daraja API Initiator if tenant has no custom credentials
      */
-    static async initiateStkPush(phoneNumber: string, amount: number, tenantId: string, userId: string = 'guest', packageId: string = '1') {
+    static async initiateStkPush(phoneNumber: string, amount: number, tenantId: string, userId: string = 'guest', packageId: string = '1', req?: any) {
         const phoneValidation = normalizeKenyanPhone(phoneNumber);
         if (!phoneValidation.isValid) {
             throw new Error(phoneValidation.error || 'Invalid Kenyan phone number for M-Pesa STK Push');
@@ -422,7 +422,7 @@ export class MpesaService {
 
             const timestamp = this.getTimestamp();
             const password = Buffer.from(`${businessShortcode}${passkey}${timestamp}`).toString('base64');
-            const callbackUrl = this.getCallbackUrl(`/api/v1/payment-callback/mpesa/stk-push/${tenantId}`);
+            const callbackUrl = this.getCallbackUrl(`/api/v1/payment-callback/mpesa/stk-push/${tenantId}`, req);
 
             // Safaricom limits: AccountReference <= 12 chars, TransactionDesc <= 13 chars
             const safeRef = `WIFI${packageId.replace(/[^0-9A-Z]/gi, '')}`.slice(0, 12).toUpperCase();
