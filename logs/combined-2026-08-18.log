@@ -219,3 +219,98 @@
 {"environment":"development","ip":"169.254.169.126","level":"info","message":"PUT /api/v1/superadmin/settings","service":"billing-system","timestamp":"2026-08-18 07:47:55"}
 {"action":"PLATFORM_SETTINGS_BULK_UPDATED","environment":"development","level":"info","message":"Audit Log Created","service":"billing-system","timestamp":"2026-08-18 07:47:55","userId":"8840f3fb-a935-4214-a0bc-8a96632d40dd"}
 {"environment":"development","ip":"169.254.169.126","level":"info","message":"POST /api/v1/superadmin/github/push","service":"billing-system","timestamp":"2026-08-18 07:47:56"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/admin/dashboard-summary","service":"billing-system","timestamp":"2026-08-18 07:48:04"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/admin/routers","service":"billing-system","timestamp":"2026-08-18 07:48:04"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/admin/profile","service":"billing-system","timestamp":"2026-08-18 07:48:04"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/admin/recent-transactions","service":"billing-system","timestamp":"2026-08-18 07:48:04"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/tenant/saas/subscription-check","service":"billing-system","timestamp":"2026-08-18 07:48:04"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/wallet/balance","service":"billing-system","timestamp":"2026-08-18 07:48:04"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/sms/balance","service":"billing-system","timestamp":"2026-08-18 07:48:04"}
+{"action":"GITHUB_PUSH_SUCCESS","environment":"development","level":"info","message":"Audit Log Created","service":"billing-system","timestamp":"2026-08-18 07:48:05","userId":"8840f3fb-a935-4214-a0bc-8a96632d40dd"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"POST /api/v1/auth/logout","service":"billing-system","timestamp":"2026-08-18 07:48:30"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"POST /api/v1/auth/login","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","level":"info","message":"Initializing physical isolation for tenant: 7377f37c-4433-4b1f-9131-7280d76e4202 as tenant_7377f37c_4433_4b1f_9131_7280d76e4202","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","level":"info","message":"Initializing physical isolation for tenant: 7377f37c-4433-4b1f-9131-7280d76e4202 as tenant_7377f37c_4433_4b1f_9131_7280d76e4202","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","level":"info","message":"Initializing physical isolation for tenant: 7377f37c-4433-4b1f-9131-7280d76e4202 as tenant_7377f37c_4433_4b1f_9131_7280d76e4202","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","level":"info","message":"Initializing physical isolation for tenant: 7377f37c-4433-4b1f-9131-7280d76e4202 as tenant_7377f37c_4433_4b1f_9131_7280d76e4202","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","level":"info","message":"Initializing physical isolation for tenant: 7377f37c-4433-4b1f-9131-7280d76e4202 as tenant_7377f37c_4433_4b1f_9131_7280d76e4202","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","level":"info","message":"Initializing physical isolation for tenant: 7377f37c-4433-4b1f-9131-7280d76e4202 as tenant_7377f37c_4433_4b1f_9131_7280d76e4202","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","level":"info","message":"Initializing physical isolation for tenant: 7377f37c-4433-4b1f-9131-7280d76e4202 as tenant_7377f37c_4433_4b1f_9131_7280d76e4202","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","level":"info","message":"Schema tenant_7377f37c_4433_4b1f_9131_7280d76e4202 isolation complete.","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/admin/dashboard-summary","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","level":"info","message":"Schema tenant_7377f37c_4433_4b1f_9131_7280d76e4202 isolation complete.","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/admin/profile","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","level":"info","message":"Schema tenant_7377f37c_4433_4b1f_9131_7280d76e4202 isolation complete.","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/tenant/saas/subscription-check","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","level":"info","message":"Schema tenant_7377f37c_4433_4b1f_9131_7280d76e4202 isolation complete.","service":"billing-system","timestamp":"2026-08-18 07:48:53"}
+{"environment":"development","level":"info","message":"Schema tenant_7377f37c_4433_4b1f_9131_7280d76e4202 isolation complete.","service":"billing-system","timestamp":"2026-08-18 07:48:54"}
+{"environment":"development","level":"info","message":"Schema tenant_7377f37c_4433_4b1f_9131_7280d76e4202 isolation complete.","service":"billing-system","timestamp":"2026-08-18 07:48:54"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/admin/routers","service":"billing-system","timestamp":"2026-08-18 07:48:54"}
+{"environment":"development","level":"info","message":"Schema tenant_7377f37c_4433_4b1f_9131_7280d76e4202 isolation complete.","service":"billing-system","timestamp":"2026-08-18 07:48:54"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/wallet/balance","service":"billing-system","timestamp":"2026-08-18 07:48:54"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/sms/balance","service":"billing-system","timestamp":"2026-08-18 07:48:54"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/admin/recent-transactions","service":"billing-system","timestamp":"2026-08-18 07:48:54"}
+{"environment":"development","level":"info","message":"Socket client connected to tenant room","service":"billing-system","socketId":"Ujm2bLAx5_qlQgq2AAAB","tenantId":"7377f37c-4433-4b1f-9131-7280d76e4202","timestamp":"2026-08-18 07:48:54"}
+{"environment":"development","level":"info","message":"Socket client connected to tenant room","service":"billing-system","socketId":"91CJ2lHlzVYOyNJaAAAD","tenantId":"7377f37c-4433-4b1f-9131-7280d76e4202","timestamp":"2026-08-18 07:48:54"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"POST /api/v1/tenant/saas/invoices/00fdf1fd-39bf-424c-bb66-d6151c729e66/pay-mpesa","service":"billing-system","timestamp":"2026-08-18 07:49:07"}
+{"amount":2,"checkoutId":"ws_CO_18082026104908766113745960","environment":"development","invoiceId":"00fdf1fd-39bf-424c-bb66-d6151c729e66","level":"info","message":"[MpesaService] Live SaaS Subscription STK Push Initiated via Master Initiator","phoneNumber":"254113745960","service":"billing-system","tenantId":"7377f37c-4433-4b1f-9131-7280d76e4202","timestamp":"2026-08-18 07:49:08"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:10"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:12"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:14"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:16"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:18"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:20"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:22"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:24"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:26"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:28"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:30"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:32"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:34"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:36"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:38"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:40"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:42"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:44"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:46"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:48"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:50"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:52"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:54"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:56"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:49:58"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:50:00"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:50:02"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:50:04"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:50:06"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/status/00fdf1fd-39bf-424c-bb66-d6151c729e66","service":"billing-system","timestamp":"2026-08-18 07:50:08"}
+{"environment":"development","level":"info","message":"Dormant router scan completed","service":"billing-system","summary":"Scanned 0 routers. Detected 0 dormant routers. Processed 0 actions.","timestamp":"2026-08-18 07:50:12"}
+{"environment":"development","level":"info","message":"Dormant router scan completed","service":"billing-system","summary":"Scanned 0 routers. Detected 0 dormant routers. Processed 0 actions.","timestamp":"2026-08-18 07:55:12"}
+{"environment":"development","level":"debug","message":"Socket client disconnected","service":"billing-system","socketId":"91CJ2lHlzVYOyNJaAAAD","timestamp":"2026-08-18 07:55:31"}
+{"environment":"development","level":"debug","message":"Socket client disconnected","service":"billing-system","socketId":"Ujm2bLAx5_qlQgq2AAAB","timestamp":"2026-08-18 07:55:32"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /","service":"billing-system","timestamp":"2026-08-18 07:59:11"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /assets/index-CpMOu4u-.js","service":"billing-system","timestamp":"2026-08-18 07:59:12"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /assets/index-DyMLNBGX.css","service":"billing-system","timestamp":"2026-08-18 07:59:12"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/plans","service":"billing-system","timestamp":"2026-08-18 07:59:13"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/portal/public/settings","service":"billing-system","timestamp":"2026-08-18 07:59:13"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/branding/public","service":"billing-system","timestamp":"2026-08-18 07:59:13"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/auth/verify","service":"billing-system","timestamp":"2026-08-18 07:59:13"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"POST /api/v1/auth/superadmin/login","service":"billing-system","timestamp":"2026-08-18 07:59:51"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/ultimate/activity-stream","service":"billing-system","timestamp":"2026-08-18 07:59:52"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/ultimate/activity-stream","service":"billing-system","timestamp":"2026-08-18 07:59:57"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/master-daraja","service":"billing-system","timestamp":"2026-08-18 07:59:59"}
+{"environment":"development","level":"info","message":"Dormant router scan completed","service":"billing-system","summary":"Scanned 0 routers. Detected 0 dormant routers. Processed 0 actions.","timestamp":"2026-08-18 08:00:12"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"PUT /api/v1/superadmin/master-daraja","service":"billing-system","timestamp":"2026-08-18 08:02:41"}
+{"environment":"development","level":"info","message":"[MpesaService] Master Daraja API Initiator credentials updated and cache invalidated","service":"billing-system","timestamp":"2026-08-18 08:02:41"}
+{"action":"MASTER_DARAJA_CONFIG_UPDATED","environment":"development","level":"info","message":"Audit Log Created","service":"billing-system","timestamp":"2026-08-18 08:02:42","userId":"8840f3fb-a935-4214-a0bc-8a96632d40dd"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/master-daraja","service":"billing-system","timestamp":"2026-08-18 08:02:42"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"POST /api/v1/superadmin/master-daraja/test","service":"billing-system","timestamp":"2026-08-18 08:03:05"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/saas/dashboard","service":"billing-system","timestamp":"2026-08-18 08:03:10"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/saas/pricing-config","service":"billing-system","timestamp":"2026-08-18 08:03:10"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/saas/invoices","service":"billing-system","timestamp":"2026-08-18 08:03:10"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/saas/plans","service":"billing-system","timestamp":"2026-08-18 08:03:10"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/settings","service":"billing-system","timestamp":"2026-08-18 08:03:20"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/account","service":"billing-system","timestamp":"2026-08-18 08:03:20"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"PUT /api/v1/superadmin/settings","service":"billing-system","timestamp":"2026-08-18 08:03:25"}
+{"action":"PLATFORM_SETTINGS_BULK_UPDATED","environment":"development","level":"info","message":"Audit Log Created","service":"billing-system","timestamp":"2026-08-18 08:03:25","userId":"8840f3fb-a935-4214-a0bc-8a96632d40dd"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"POST /api/v1/superadmin/github/push","service":"billing-system","timestamp":"2026-08-18 08:03:26"}
