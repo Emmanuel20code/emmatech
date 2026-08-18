@@ -499,3 +499,90 @@
 {"environment":"development","ip":"169.254.169.126","level":"info","message":"PUT /api/v1/superadmin/settings","service":"billing-system","timestamp":"2026-08-18 08:20:56"}
 {"action":"PLATFORM_SETTINGS_BULK_UPDATED","environment":"development","level":"info","message":"Audit Log Created","service":"billing-system","timestamp":"2026-08-18 08:20:56","userId":"8840f3fb-a935-4214-a0bc-8a96632d40dd"}
 {"environment":"development","ip":"169.254.169.126","level":"info","message":"POST /api/v1/superadmin/github/push","service":"billing-system","timestamp":"2026-08-18 08:20:57"}
+{"action":"GITHUB_PUSH_SUCCESS","environment":"development","level":"info","message":"Audit Log Created","service":"billing-system","timestamp":"2026-08-18 08:21:06","userId":"8840f3fb-a935-4214-a0bc-8a96632d40dd"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/ultimate/activity-stream","service":"billing-system","timestamp":"2026-08-18 08:21:14"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/command/overview","service":"billing-system","timestamp":"2026-08-18 08:21:16"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/command/bi-analytics","service":"billing-system","timestamp":"2026-08-18 08:21:16"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/command/noc","service":"billing-system","timestamp":"2026-08-18 08:21:16"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/command/ai-insights","service":"billing-system","timestamp":"2026-08-18 08:21:16"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/command/soc","service":"billing-system","timestamp":"2026-08-18 08:21:16"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/command/tenants","service":"billing-system","timestamp":"2026-08-18 08:21:16"}
+{"environment":"development","level":"info","message":"Dormant router scan completed","service":"billing-system","summary":"Scanned 0 routers. Detected 0 dormant routers. Processed 0 actions.","timestamp":"2026-08-18 08:24:46"}
+{"environment":"development","level":"info","message":"Polling status for pending payment","paymentId":"850a54b4-b1c3-45b4-91a2-0bb2e946065c","service":"billing-system","timestamp":"2026-08-18 08:29:46"}
+{"environment":"development","level":"info","message":"Dormant router scan completed","service":"billing-system","summary":"Scanned 0 routers. Detected 0 dormant routers. Processed 0 actions.","timestamp":"2026-08-18 08:29:46"}
+{"checkoutRequestID":"ws_CO_18082026112629483113745960","environment":"development","error":{"errorCode":"500.001.1001","errorMessage":"The transaction does not Exist","requestId":"ws_CO_18082026112629483113745960"},"level":"warn","message":"[MpesaService] Live STK Query Failed or In Progress","service":"billing-system","timestamp":"2026-08-18 08:29:47"}
+{"environment":"development","level":"info","message":"Polling status for pending payment","paymentId":"850a54b4-b1c3-45b4-91a2-0bb2e946065c","service":"billing-system","timestamp":"2026-08-18 08:31:46"}
+{"environment":"development","level":"info","message":"Polling status for pending payment","paymentId":"850a54b4-b1c3-45b4-91a2-0bb2e946065c","service":"billing-system","timestamp":"2026-08-18 08:33:46"}
+{"environment":"development","level":"info","message":"Dormant router scan completed","service":"billing-system","summary":"Scanned 0 routers. Detected 0 dormant routers. Processed 0 actions.","timestamp":"2026-08-18 08:34:46"}
+{"environment":"development","level":"info","message":"Polling status for pending payment","paymentId":"850a54b4-b1c3-45b4-91a2-0bb2e946065c","service":"billing-system","timestamp":"2026-08-18 08:35:46"}
+{"environment":"development","level":"info","message":"Polling status for pending payment","paymentId":"850a54b4-b1c3-45b4-91a2-0bb2e946065c","service":"billing-system","timestamp":"2026-08-18 08:37:46"}
+{"environment":"development","level":"info","message":"Dormant router scan completed","service":"billing-system","summary":"Scanned 0 routers. Detected 0 dormant routers. Processed 0 actions.","timestamp":"2026-08-18 08:39:46"}
+{"environment":"development","level":"info","message":"Database connection established successfully.","service":"billing-system","timestamp":"2026-08-18 08:42:18"}
+{"environment":"development","level":"info","message":"Database schema sync applied: PayHero columns checked.","service":"billing-system","timestamp":"2026-08-18 08:42:22"}
+{"environment":"development","level":"info","message":"Database schema synced successfully.","service":"billing-system","timestamp":"2026-08-18 08:42:22"}
+{"environment":"development","level":"info","message":"Checking for missing WhatsApp templates...","service":"billing-system","timestamp":"2026-08-18 08:42:22"}
+{"environment":"development","level":"info","message":"WhatsApp template check complete.","service":"billing-system","timestamp":"2026-08-18 08:42:23"}
+{"environment":"development","level":"info","message":"Super Admin password & role verified for: admin@example.com","service":"billing-system","timestamp":"2026-08-18 08:42:24"}
+{"environment":"development","intervalMs":30000,"level":"info","message":"Traffic Monitor Service Started","service":"billing-system","timestamp":"2026-08-18 08:42:24"}
+{"environment":"development","level":"info","message":"Socket.io service initialized","service":"billing-system","timestamp":"2026-08-18 08:42:24"}
+{"environment":"development","level":"info","message":"Production SaaS Billing System running on port 3000","service":"billing-system","timestamp":"2026-08-18 08:42:24"}
+{"environment":"development","level":"info","message":"Dormant router scan completed","service":"billing-system","summary":"Scanned 0 routers. Detected 0 dormant routers. Processed 0 actions.","timestamp":"2026-08-18 08:42:24"}
+{"environment":"development","level":"info","message":"Database connection established successfully.","service":"billing-system","timestamp":"2026-08-18 08:42:49"}
+{"environment":"development","level":"info","message":"Database schema sync applied: PayHero columns checked.","service":"billing-system","timestamp":"2026-08-18 08:42:51"}
+{"environment":"development","level":"info","message":"Database schema synced successfully.","service":"billing-system","timestamp":"2026-08-18 08:42:51"}
+{"environment":"development","level":"info","message":"Checking for missing WhatsApp templates...","service":"billing-system","timestamp":"2026-08-18 08:42:51"}
+{"environment":"development","level":"info","message":"Seeded template 'Welcome Message' for tenant sign","service":"billing-system","timestamp":"2026-08-18 08:42:52"}
+{"environment":"development","level":"info","message":"Seeded template 'Payment Reminder' for tenant sign","service":"billing-system","timestamp":"2026-08-18 08:42:52"}
+{"environment":"development","level":"info","message":"Seeded template 'Promotion Alert' for tenant sign","service":"billing-system","timestamp":"2026-08-18 08:42:52"}
+{"environment":"development","level":"info","message":"WhatsApp template check complete.","service":"billing-system","timestamp":"2026-08-18 08:42:52"}
+{"environment":"development","level":"info","message":"Super Admin password & role verified for: admin@example.com","service":"billing-system","timestamp":"2026-08-18 08:42:52"}
+{"environment":"development","intervalMs":30000,"level":"info","message":"Traffic Monitor Service Started","service":"billing-system","timestamp":"2026-08-18 08:42:52"}
+{"environment":"development","level":"info","message":"Socket.io service initialized","service":"billing-system","timestamp":"2026-08-18 08:42:52"}
+{"environment":"development","level":"info","message":"Production SaaS Billing System running on port 3000","service":"billing-system","timestamp":"2026-08-18 08:42:52"}
+{"environment":"development","level":"info","message":"Dormant router scan completed","service":"billing-system","summary":"Scanned 0 routers. Detected 0 dormant routers. Processed 0 actions.","timestamp":"2026-08-18 08:42:52"}
+{"environment":"development","ip":"127.0.0.1","level":"info","message":"GET /","service":"billing-system","timestamp":"2026-08-18 08:42:53"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /","service":"billing-system","timestamp":"2026-08-18 08:42:57"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /assets/index-CpMOu4u-.js","service":"billing-system","timestamp":"2026-08-18 08:42:58"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /assets/index-DyMLNBGX.css","service":"billing-system","timestamp":"2026-08-18 08:42:58"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/plans","service":"billing-system","timestamp":"2026-08-18 08:43:00"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/portal/public/settings","service":"billing-system","timestamp":"2026-08-18 08:43:00"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/auth/verify","service":"billing-system","timestamp":"2026-08-18 08:43:00"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/branding/public","service":"billing-system","timestamp":"2026-08-18 08:43:00"}
+{"environment":"development","level":"info","message":"Polling status for pending payment","paymentId":"850a54b4-b1c3-45b4-91a2-0bb2e946065c","service":"billing-system","timestamp":"2026-08-18 08:44:52"}
+{"environment":"development","level":"info","message":"Database connection established successfully.","service":"billing-system","timestamp":"2026-08-18 08:46:25"}
+{"environment":"development","level":"info","message":"Database schema sync applied: PayHero columns checked.","service":"billing-system","timestamp":"2026-08-18 08:46:28"}
+{"environment":"development","level":"info","message":"Database schema synced successfully.","service":"billing-system","timestamp":"2026-08-18 08:46:28"}
+{"environment":"development","level":"info","message":"Checking for missing WhatsApp templates...","service":"billing-system","timestamp":"2026-08-18 08:46:28"}
+{"environment":"development","level":"info","message":"WhatsApp template check complete.","service":"billing-system","timestamp":"2026-08-18 08:46:28"}
+{"environment":"development","level":"info","message":"Super Admin password & role verified for: admin@example.com","service":"billing-system","timestamp":"2026-08-18 08:46:29"}
+{"environment":"development","intervalMs":30000,"level":"info","message":"Traffic Monitor Service Started","service":"billing-system","timestamp":"2026-08-18 08:46:29"}
+{"environment":"development","level":"info","message":"Socket.io service initialized","service":"billing-system","timestamp":"2026-08-18 08:46:29"}
+{"environment":"development","level":"info","message":"Production SaaS Billing System running on port 3000","service":"billing-system","timestamp":"2026-08-18 08:46:29"}
+{"environment":"development","level":"info","message":"Dormant router scan completed","service":"billing-system","summary":"Scanned 0 routers. Detected 0 dormant routers. Processed 0 actions.","timestamp":"2026-08-18 08:46:29"}
+{"environment":"development","level":"info","message":"Database connection established successfully.","service":"billing-system","timestamp":"2026-08-18 08:46:59"}
+{"environment":"development","level":"info","message":"Database schema sync applied: PayHero columns checked.","service":"billing-system","timestamp":"2026-08-18 08:47:01"}
+{"environment":"development","level":"info","message":"Database schema synced successfully.","service":"billing-system","timestamp":"2026-08-18 08:47:01"}
+{"environment":"development","level":"info","message":"Checking for missing WhatsApp templates...","service":"billing-system","timestamp":"2026-08-18 08:47:01"}
+{"environment":"development","level":"info","message":"WhatsApp template check complete.","service":"billing-system","timestamp":"2026-08-18 08:47:02"}
+{"environment":"development","level":"info","message":"Super Admin password & role verified for: admin@example.com","service":"billing-system","timestamp":"2026-08-18 08:47:02"}
+{"environment":"development","intervalMs":30000,"level":"info","message":"Traffic Monitor Service Started","service":"billing-system","timestamp":"2026-08-18 08:47:02"}
+{"environment":"development","level":"info","message":"Socket.io service initialized","service":"billing-system","timestamp":"2026-08-18 08:47:02"}
+{"environment":"development","level":"info","message":"Production SaaS Billing System running on port 3000","service":"billing-system","timestamp":"2026-08-18 08:47:02"}
+{"environment":"development","level":"info","message":"Dormant router scan completed","service":"billing-system","summary":"Scanned 0 routers. Detected 0 dormant routers. Processed 0 actions.","timestamp":"2026-08-18 08:47:02"}
+{"environment":"development","ip":"127.0.0.1","level":"info","message":"GET /","service":"billing-system","timestamp":"2026-08-18 08:47:03"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /","service":"billing-system","timestamp":"2026-08-18 08:47:08"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /assets/index-DyMLNBGX.css","service":"billing-system","timestamp":"2026-08-18 08:47:09"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /assets/index-CpMOu4u-.js","service":"billing-system","timestamp":"2026-08-18 08:47:09"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/branding/public","service":"billing-system","timestamp":"2026-08-18 08:47:11"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/portal/public/settings","service":"billing-system","timestamp":"2026-08-18 08:47:11"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/auth/verify","service":"billing-system","timestamp":"2026-08-18 08:47:11"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/checkout/plans","service":"billing-system","timestamp":"2026-08-18 08:47:11"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"POST /api/v1/auth/superadmin/login","service":"billing-system","timestamp":"2026-08-18 08:48:10"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/ultimate/activity-stream","service":"billing-system","timestamp":"2026-08-18 08:48:11"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/ultimate/activity-stream","service":"billing-system","timestamp":"2026-08-18 08:48:16"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/ultimate/activity-stream","service":"billing-system","timestamp":"2026-08-18 08:48:21"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/account","service":"billing-system","timestamp":"2026-08-18 08:48:22"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"GET /api/v1/superadmin/settings","service":"billing-system","timestamp":"2026-08-18 08:48:22"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"PUT /api/v1/superadmin/settings","service":"billing-system","timestamp":"2026-08-18 08:48:32"}
+{"action":"PLATFORM_SETTINGS_BULK_UPDATED","environment":"development","level":"info","message":"Audit Log Created","service":"billing-system","timestamp":"2026-08-18 08:48:32","userId":"8840f3fb-a935-4214-a0bc-8a96632d40dd"}
+{"environment":"development","ip":"169.254.169.126","level":"info","message":"POST /api/v1/superadmin/github/push","service":"billing-system","timestamp":"2026-08-18 08:48:33"}

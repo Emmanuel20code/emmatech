@@ -636,8 +636,14 @@ class MpesaService {
             return response.data;
         }
         catch (error) {
-            const errMsg = error.response?.data || error.message;
-            logger_1.default.warn('[MpesaService] Live STK Query Failed or In Progress', { checkoutRequestID, error: errMsg });
+            const errData = error.response?.data;
+            const errMsg = errData || error.message;
+            if (errData?.errorCode === '500.001.1001' || (typeof errMsg === 'string' && errMsg.includes('does not Exist'))) {
+                logger_1.default.debug('[MpesaService] STK Query: Transaction not found yet or pending', { checkoutRequestID });
+            }
+            else {
+                logger_1.default.warn('[MpesaService] Live STK Query Failed or In Progress', { checkoutRequestID, error: errMsg });
+            }
             return null;
         }
     }

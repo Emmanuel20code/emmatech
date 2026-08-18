@@ -192,6 +192,15 @@ router.post('/:tenantId/pay', async (req: any, res: any) => {
         }
         const actualTenantId = tenant.id;
 
+        // Check if tenant is active/suspended
+        if (tenant.status !== 'ACTIVE') {
+            return res.status(403).json({ 
+                error: 'Service temporarily suspended', 
+                code: 'TENANT_SUSPENDED',
+                message: 'This Wi-Fi network subscription is currently inactive or suspended. Please contact the administrator or complete renewal.' 
+            });
+        }
+
         // Rate limiting check
         const windowStart = Date.now() - (60 * 1000);
         const recentCount = await Payment.count({
